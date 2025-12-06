@@ -2,6 +2,7 @@ package com.example.schoolmanagementsystem.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -47,5 +48,22 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
+    }
+
+    public void addTeacher(Teacher teacher){
+        if(teachers == null){
+            teachers = new ArrayList<>();
+        }
+
+        teachers.add(teacher);
+        teacher.addStudents(this);
     }
 }

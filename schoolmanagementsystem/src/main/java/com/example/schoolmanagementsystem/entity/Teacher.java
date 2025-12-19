@@ -30,6 +30,11 @@ public class Teacher {
     public Teacher() {
     }
 
+    public Teacher(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Integer getTeacherId() {
         return teacherId;
     }

@@ -26,6 +26,11 @@ public class Student {
     public Student() {
     }
 
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Integer getStudentId() {
         return studentId;
     }

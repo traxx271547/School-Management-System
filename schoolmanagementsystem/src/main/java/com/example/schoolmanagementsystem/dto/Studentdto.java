@@ -1,5 +1,7 @@
 package com.example.schoolmanagementsystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Studentdto {
      private Integer studentId;
 
@@ -7,10 +9,25 @@ public class Studentdto {
 
      private String lastName;
 
+     @JsonProperty("classes")
+     private Classdto classdto;
+
+     @JsonProperty("details")
+     private StudentDetailsdto studentDetailsdto;
+
     public Studentdto(Integer studentId, String firstName, String lastName) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Studentdto(Integer studentId, String firstName, String lastName, Classdto classdto,
+                      StudentDetailsdto studentDetailsdto) {
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.classdto = classdto;
+        this.studentDetailsdto = studentDetailsdto;
     }
 
     public Integer getStudentId() {
@@ -35,5 +52,13 @@ public class Studentdto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Classdto getClassdto() {
+        return classdto;
+    }
+
+    public void setClassdto(Classdto classdto) {
+        this.classdto = classdto;
     }
 }

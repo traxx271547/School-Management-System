@@ -18,6 +18,17 @@ public class Teacher {
     @Column(name="last_name")
     private String lastName;
 
+    @OneToOne(mappedBy = "teacher", cascade=CascadeType.ALL,
+            fetch = FetchType.LAZY,orphanRemoval = true)
+    private TeacherDetails teacherDetails;
+
+    @ManyToMany(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(
+            name="teacher_class",
+            joinColumns=@JoinColumn(name="teacher_id"),
+            inverseJoinColumns=@JoinColumn(name="class_id")
+    )
+    private List<ClassEntity> classes;
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(
@@ -67,6 +78,14 @@ public class Teacher {
         this.students = students;
     }
 
+    public List<ClassEntity> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<ClassEntity> classes) {
+        this.classes = classes;
+    }
+
     public void addStudents(Student student){
         if(students == null){
             students = new ArrayList<>();
@@ -75,5 +94,21 @@ public class Teacher {
 
         students.add(student);
 
+    }
+
+    public void addClass(ClassEntity clas){
+        if(classes == null){
+            classes = new ArrayList<>();
+        }
+
+        classes.add(clas);
+    }
+
+    public TeacherDetails getTeacherDetails() {
+        return teacherDetails;
+    }
+
+    public void setTeacherDetails(TeacherDetails teacherDetails) {
+        this.teacherDetails = teacherDetails;
     }
 }

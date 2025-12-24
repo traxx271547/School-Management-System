@@ -264,6 +264,7 @@ export default function SchoolManagementApp() {
       console.error('Error:', error);
     }
   };
+  
 
   const assignClassToTeacher = async (teacherId, classId) => {
     try {
@@ -807,64 +808,68 @@ export default function SchoolManagementApp() {
                       ))}
                     </div>
                   )}
+{activeModal === 'studentClasses' && (
+  <div>
+    {students.map(s => (
+      <div key={s.studentId} className="card mb-3">
+        <div className="card-body">
+          <h6>{s.firstName} {s.lastName}</h6>
 
-                  {activeModal === 'studentClasses' && (
-                    <div>
-                      {students.map(s => (
-                        <div key={s.studentId} className="card mb-3">
-                          <div className="card-body">
-                            <h6>{s.firstName} {s.lastName}</h6>
-                            <div className="mb-3">
-                              <strong>Enrolled Classes:</strong>
-                              <div className="d-flex flex-wrap gap-2 mt-2">
-                                {s.classes && s.classes.length > 0 ? (
-                                  s.classes.map(c => (
-                                    <div key={c.classId} className="card border-warning mb-2">
-                                      <div className="card-body p-2">
-                                        <div className="d-flex justify-content-between align-items-start">
-                                          <div>
-                                            <strong>{c.section}</strong>
-                                            {c.subjects && c.subjects.length > 0 && (
-                                              <div className="mt-1">
-                                                <small>Subjects: {c.subjects.join(', ')}</small>
-                                              </div>
-                                            )}
-                                          </div>
-                                          <button
-                                            onClick={() => unassignClassFromStudent(s.studentId, c.classId)}
-                                            className="btn btn-sm btn-danger"
-                                          >
-                                            <X size={14} />
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <span className="text-muted">None</span>
-                                )}
-                              </div>
-                            </div>
-                            <div>
-                              <strong>Available Classes:</strong>
-                              <div className="d-flex flex-wrap gap-2 mt-2">
-                                {classes.filter(c => !s.classes?.find(sc => sc.classId === c.classId))
-                                  .map(c => (
-                                    <button
-                                      key={c.classId}
-                                      onClick={() => assignClassToStudent(s.studentId, c.classId)}
-                                      className="btn btn-sm btn-outline-warning"
-                                    >
-                                      + {c.section}
-                                    </button>
-                                  ))}
-                              </div>
-                            </div>
+          {/* Enrolled Class */}
+          <div className="mb-3">
+            <strong>Enrolled Class:</strong>
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              {s.class ? (
+                <div className="card border-warning mb-2">
+                  <div className="card-body p-2">
+                    <div className="d-flex justify-content-between align-items-start">
+                      <div>
+                        <strong>{s.class.section}</strong>
+                        {s.class.subjects && s.class.subjects.length > 0 && (
+                          <div className="mt-1">
+                            <small>Subjects: {s.class.subjects.join(', ')}</small>
                           </div>
-                        </div>
-                      ))}
+                        )}
+                      </div>
+                      <button
+                        onClick={() =>
+                          unassignClassFromStudent(s.studentId, s.class.classId)
+                        }
+                        className="btn btn-sm btn-danger"
+                      >
+                        <X size={14} />
+                      </button>
                     </div>
-                  )}
+                  </div>
+                </div>
+              ) : (
+                <span className="text-muted">None</span>
+              )}
+            </div>
+          </div>
+
+          {/* Available Classes */}
+          <div>
+            <strong>Available Classes:</strong>
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              {classes
+                .filter(c => s.class?.classId !== c.classId)
+                .map(c => (
+                  <button
+                    key={c.classId}
+                    onClick={() => assignClassToStudent(s.studentId, c.classId)}
+                    className="btn btn-sm btn-outline-warning"
+                  >
+                    + {c.section}
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
 
                   {activeModal === 'teacherDetails' && (
                     <div>

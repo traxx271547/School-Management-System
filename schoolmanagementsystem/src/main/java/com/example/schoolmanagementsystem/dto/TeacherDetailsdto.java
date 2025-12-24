@@ -1,35 +1,20 @@
-package com.example.schoolmanagementsystem.entity;
+package com.example.schoolmanagementsystem.dto;
 
-import jakarta.persistence.*;
+public class TeacherDetailsdto {
+    private Integer teacherId;
 
-@Entity
-@Table(name="teacher_details")
-public class TeacherDetails {
-    @Id
-    private Integer teacherId; // pk == fk
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="teacher_id")
-    private Teacher teacher;
-
-    @Column(name="address")
     private String address;
 
-    @Column(name="mobile_number")
     private String mobileNumber;
 
-    @Column(name="mother_name")
     private String motherName;
 
-    @Column(name="father_name")
     private String fatherName;
 
-    public TeacherDetails() {
+    public TeacherDetailsdto() {
     }
 
-    public TeacherDetails(String address, String mobileNumber, String motherName, String fatherName) {
-
+    public TeacherDetailsdto(Integer teacherId, String address, String mobileNumber, String motherName, String fatherName) {
         this.teacherId = teacherId;
         this.address = address;
         this.mobileNumber = mobileNumber;
@@ -43,14 +28,6 @@ public class TeacherDetails {
 
     public void setTeacherId(Integer teacherId) {
         this.teacherId = teacherId;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
     }
 
     public String getAddress() {
@@ -84,6 +61,4 @@ public class TeacherDetails {
     public void setFatherName(String fatherName) {
         this.fatherName = fatherName;
     }
-
-
 }

@@ -1,17 +1,18 @@
 package com.example.schoolmanagementsystem.entity;
 
 import jakarta.persistence.*;
-
 @Entity
-@Table(name="teacher_details")
-public class TeacherDetails {
+@Table(name="student_details")
+public class StudentDetails {
+
     @Id
-    private Integer teacherId; // pk == fk
+    private Integer studentId;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name="teacher_id")
-    private Teacher teacher;
+    @JoinColumn(name="student_id")
+    private Student student;
+
 
     @Column(name="address")
     private String address;
@@ -25,32 +26,32 @@ public class TeacherDetails {
     @Column(name="father_name")
     private String fatherName;
 
-    public TeacherDetails() {
+    public StudentDetails() {
     }
 
-    public TeacherDetails(String address, String mobileNumber, String motherName, String fatherName) {
+    public StudentDetails(String address, String mobileNumber, String motherName, String fatherName) {
 
-        this.teacherId = teacherId;
+        this.student = student;
         this.address = address;
         this.mobileNumber = mobileNumber;
         this.motherName = motherName;
         this.fatherName = fatherName;
     }
 
-    public Integer getTeacherId() {
-        return teacherId;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public String getAddress() {
@@ -84,6 +85,4 @@ public class TeacherDetails {
     public void setFatherName(String fatherName) {
         this.fatherName = fatherName;
     }
-
-
 }

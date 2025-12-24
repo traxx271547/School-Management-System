@@ -1,10 +1,16 @@
 package com.example.schoolmanagementsystem.controller;
 
+import com.example.schoolmanagementsystem.dto.Classdto;
 import com.example.schoolmanagementsystem.dto.Studentdto;
+import com.example.schoolmanagementsystem.dto.TeacherDetailsdto;
 import com.example.schoolmanagementsystem.dto.Teacherdto;
+import com.example.schoolmanagementsystem.entity.ClassEntity;
 import com.example.schoolmanagementsystem.entity.Student;
 import com.example.schoolmanagementsystem.entity.Teacher;
+import com.example.schoolmanagementsystem.entity.TeacherDetails;
+import com.example.schoolmanagementsystem.repositories.ClassRepositories;
 import com.example.schoolmanagementsystem.repositories.StudentRepositories;
+import com.example.schoolmanagementsystem.repositories.TeacherDetailsRepositories;
 import com.example.schoolmanagementsystem.repositories.TeacherRepositories;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +30,16 @@ public class TeacherController {
 
     private StudentRepositories studentRepositories;
 
+    private ClassRepositories classRepositories;
+
+    private TeacherDetailsRepositories teacherDetailsRepositories;
+
     @Autowired
-    public TeacherController(TeacherRepositories teacherRepositories, StudentRepositories studentRepositories){
+    public TeacherController(TeacherRepositories teacherRepositories, StudentRepositories studentRepositories,
+                             ClassRepositories classRepositories){
         this.teacherRepositories = teacherRepositories;
         this.studentRepositories = studentRepositories;
+        this.classRepositories = classRepositories;
     }
 
     @GetMapping("/teachers")
@@ -36,6 +48,7 @@ public class TeacherController {
         List<Teacherdto> userResponse = new ArrayList<>();
         for(Teacher teacher:teachers){
 
+
             List<Studentdto> students = teacher.getStudents().stream()
                     .map(s -> new Studentdto(
                             s.getStudentId(),
@@ -43,10 +56,31 @@ public class TeacherController {
                             s.getLastName()
                     ))
                     .toList();
+
+            List<Classdto> classes = teacher.getClasses().stream()
+                    .map(s->new Classdto(
+                            s.getClassId(),
+                            s.getSection(),
+                            s.getSubjects()
+                            )).toList();
+
+            TeacherDetails details = teacher.getTeacherDetails();
+
+            TeacherDetailsdto teacherDetailsdto = null;
+
+            if(details!=null){
+                teacherDetailsdto = new TeacherDetailsdto(details.getTeacherId(),
+                        details.getAddress(),
+                        details.getMobileNumber(),
+                        details.getMotherName(),
+                        details.getFatherName());
+            }
             Teacherdto response = new Teacherdto(teacher.getTeacherId(),
                     teacher.getFirstName(),
                     teacher.getLastName(),
-                    students);
+                    students,
+                    classes,
+                    teacherDetailsdto);
             userResponse.add(response);
         }
         return ResponseEntity.ok(userResponse);
@@ -100,5 +134,36 @@ public class TeacherController {
 
         return ResponseEntity.ok().build();
     }
+
+    //assigns classes
+    @PostMapping("/teachers/{teacherId}/classes/{classId}")
+    public ResponseEntity<?> assignClassToTeacher(@PathVariable Integer teacherId,
+                                                  @PathVariable Integer classId){
+        Teacher teacher = teacherRepositories.findById(teacherId)
+                .orElseThrow(()->new RuntimeException("Teacher not found"));
+        ClassEntity clas = classRepositories.findById(classId)
+                .orElseThrow(()->new RuntimeException("Class not found"));
+        teacher.getClasses().add(clas);
+        teacherRepositories.save(teacher);
+
+
+        return ResponseEntity.ok().build();
+    }
+
+    //delete classes
+    @DeleteMapping("/teachers/{teacherId}/classes/{classId}")
+    public ResponseEntity<?> unassignClassToTeacher(@PathVariable Integer teacherId,
+                                                    @PathVariable Integer classId){
+        Teacher teacher = teacherRepositories.findById(teacherId)
+                .orElseThrow(()->new RuntimeException("Teacher not found"));
+        ClassEntity clas = classRepositories.findById(classId)
+                .orElseThrow(()->new RuntimeException("Class not found"));
+
+        teacher.getClasses().remove(clas);
+        teacherRepositories.save(teacher);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

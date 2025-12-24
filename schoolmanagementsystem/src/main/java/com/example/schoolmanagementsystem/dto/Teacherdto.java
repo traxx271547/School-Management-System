@@ -14,6 +14,12 @@ public class Teacherdto {
     @JsonProperty("students")
     private List<Studentdto> students;
 
+    @JsonProperty("classes")
+    private List<Classdto> classes;
+
+    @JsonProperty("details")
+    private TeacherDetailsdto teacherDetailsdto;
+
     public Teacherdto() {
     }
 
@@ -23,11 +29,14 @@ public class Teacherdto {
         this.lastName = lastName;
     }
 
-    public Teacherdto(Integer teacherId, String firstName, String lastName, List<Studentdto> students) {
+    public Teacherdto(Integer teacherId, String firstName, String lastName,
+                      List<Studentdto> students,List<Classdto> classes, TeacherDetailsdto teacherDetailsdto) {
         this.teacherId = teacherId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.students = students;
+        this.classes = classes;
+        this.teacherDetailsdto = teacherDetailsdto;
     }
 
     public Integer getTeacherId() {
@@ -60,5 +69,21 @@ public class Teacherdto {
 
     public void setStudentdto(List<Studentdto> studentdto) {
         this.students = studentdto;
+    }
+
+    public List<Classdto> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<Classdto> classes) {
+        this.classes = classes;
+    }
+
+    public TeacherDetailsdto getTeacherDetailsdto() {
+        return teacherDetailsdto;
+    }
+
+    public void setTeacherDetailsdto(TeacherDetailsdto teacherDetailsdto) {
+        this.teacherDetailsdto = teacherDetailsdto;
     }
 }

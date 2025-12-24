@@ -18,10 +18,17 @@ public class Student {
     @Column(name="last_name")
     private String lastName;
 
+    @OneToOne(mappedBy="student",cascade = CascadeType.ALL, orphanRemoval = true)
+    private StudentDetails studentDetails;
+
     @ManyToMany(
             cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
             mappedBy = "students")
     private List<Teacher> teachers;
+
+    @ManyToOne
+    @JoinColumn(name="class_id")
+    private ClassEntity classEntity;
 
     public Student() {
     }
@@ -70,5 +77,21 @@ public class Student {
 
         teachers.add(teacher);
         teacher.addStudents(this);
+    }
+
+    public ClassEntity getClassEntity() {
+        return classEntity;
+    }
+
+    public void setClassEntity(ClassEntity classEntity) {
+        this.classEntity = classEntity;
+    }
+
+    public StudentDetails getStudentDetails() {
+        return studentDetails;
+    }
+
+    public void setStudentDetails(StudentDetails studentDetails) {
+        this.studentDetails = studentDetails;
     }
 }
